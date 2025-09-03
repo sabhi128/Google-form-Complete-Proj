@@ -21,18 +21,18 @@ export default function Form1() {
 
   return (
     <div className="max-w-xl p-6 mx-auto mt-10 space-y-4 bg-white rounded-lg shadow-md">
-      <div className="flex items-center space-x-4">
-        <label className="flex items-center space-x-1">
+      <div className="flex flex-wrap items-center gap-4">
+        <label className="flex items-center gap-1">
           <input type="checkbox" checked={captcha} onChange={() => setCaptcha(!captcha)} />
           <span>Captcha</span>
         </label>
 
-        <label className="flex items-center space-x-1">
+        <label className="flex items-center gap-1">
           <input type="checkbox" checked={shuffleQs} onChange={() => setShuffleQs(!shuffleQs)} />
           <span>Shuffle Qs</span>
         </label>
 
-        <label className="flex items-center space-x-1">
+        <label className="flex items-center gap-1">
           <input
             type="checkbox"
             checked={shuffleOptions}
@@ -41,7 +41,7 @@ export default function Form1() {
           <span>Shuffle options</span>
         </label>
 
-        <label className="flex items-center space-x-1">
+        <label className="flex items-center gap-1">
           <span>Quota</span>
           <input
             type="number"
@@ -52,28 +52,28 @@ export default function Form1() {
         </label>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <label>
+      <div className="flex flex-wrap items-center gap-4">
+        <label className="flex-1 min-w-[200px]">
           Open at
           <input
             type="datetime-local"
             value={openAt}
             onChange={(e) => setOpenAt(e.target.value)}
-            className="px-2 py-1 ml-1 border rounded"
+            className="w-full px-2 py-1 mt-1 border rounded"
           />
         </label>
 
-        <label>
+        <label className="flex-1 min-w-[200px]">
           Close at
           <input
             type="datetime-local"
             value={closeAt}
             onChange={(e) => setCloseAt(e.target.value)}
-            className="px-2 py-1 ml-1 border rounded"
+            className="w-full px-2 py-1 mt-1 border rounded"
           />
         </label>
 
-        <label className="flex items-center space-x-1">
+        <label className="flex items-center gap-1">
           <span>Accent</span>
           <input
             type="color"
@@ -104,28 +104,28 @@ export default function Form1() {
         />
       </div>
 
-      <div className="flex space-x-2">
+      <div className="flex flex-wrap gap-2">
         <button
           onClick={() => alert("Basics clicked")}
-          className="px-4 py-2 border rounded hover:bg-gray-100"
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
         >
           Basics
         </button>
         <button
           onClick={() => alert("Details clicked")}
-          className="px-4 py-2 border rounded hover:bg-gray-100"
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
         >
           Details
         </button>
         <button
           onClick={handleAddSection}
-          className="px-4 py-2 border rounded hover:bg-gray-100"
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
         >
           Add section
         </button>
         <button
           onClick={handleRemoveSection}
-          className="px-4 py-2 text-red-500 border rounded hover:bg-red-50"
+          className="flex-1 px-4 py-2 text-red-500 border rounded hover:bg-red-50"
         >
           Remove section
         </button>
