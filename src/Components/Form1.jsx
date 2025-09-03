@@ -12,7 +12,7 @@ export default function Form1() {
   const [description, setDescription] = useState("");
   const [thankYouMessage, setThankYouMessage] = useState("Thanks for your response!");
 
-  // New state to hold dynamic sections
+  // Dynamic sections
   const [sections, setSections] = useState([]);
 
   const handleAddSection = () => {
@@ -25,76 +25,134 @@ export default function Form1() {
   };
 
   const handleRemoveSection = (id) => {
-    setSections(sections.filter(section => section.id !== id));
+    setSections(sections.filter((section) => section.id !== id));
   };
 
   return (
-    <div className="max-w-4xl p-6 mt-10 ml-20 mr-auto bg-white shadow-md ml pace-y-4 m rounded-3xl">
+    <div className="max-w-4xl p-6 mt-10 ml-20 mr-auto bg-white shadow-md space-y-4 rounded-3xl">
       {/* Form Controls */}
-      <div className="flex items-center space-x-4">
-        <label className="flex items-center space-x-1">
+      <div className="flex flex-wrap items-center gap-4">
+        <label className="flex items-center gap-1">
           <input type="checkbox" checked={quiz} onChange={() => setQuiz(!quiz)} />
           <span>Quiz</span>
         </label>
-        <label className="flex items-center space-x-1">
-          <span>Quota</span>
-          <input type="number" value={quota} onChange={(e) => setQuota(e.target.value)} className="w-20 px-2 border rounded" />
-        </label>
-        <label className="flex items-center space-x-1">
+
+        <label className="flex items-center gap-1">
           <input type="checkbox" checked={captcha} onChange={() => setCaptcha(!captcha)} />
           <span>Captcha</span>
         </label>
-        <label className="flex items-center space-x-1">
+
+        <label className="flex items-center gap-1">
           <input type="checkbox" checked={shuffleQs} onChange={() => setShuffleQs(!shuffleQs)} />
           <span>Shuffle Qs</span>
         </label>
-        <label className="flex items-center space-x-1">
-          <input type="checkbox" checked={shuffleOptions} onChange={() => setShuffleOptions(!shuffleOptions)} />
+
+        <label className="flex items-center gap-1">
+          <input
+            type="checkbox"
+            checked={shuffleOptions}
+            onChange={() => setShuffleOptions(!shuffleOptions)}
+          />
           <span>Shuffle options</span>
         </label>
 
+        <label className="flex items-center gap-1">
+          <span>Quota</span>
+          <input
+            type="number"
+            value={quota}
+            onChange={(e) => setQuota(e.target.value)}
+            className="w-20 px-2 border rounded"
+          />
+        </label>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <label>
-          Open atF
-          <input type="datetime-local" value={openAt} onChange={(e) => setOpenAt(e.target.value)} className="px-2 py-1 ml-1 border rounded" />
+      <div className="flex flex-wrap items-center gap-4">
+        <label className="flex-1 min-w-[200px]">
+          Open at
+          <input
+            type="datetime-local"
+            value={openAt}
+            onChange={(e) => setOpenAt(e.target.value)}
+            className="w-full px-2 py-1 mt-1 border rounded"
+          />
         </label>
-        <label>
+
+        <label className="flex-1 min-w-[200px]">
           Close at
-          <input type="datetime-local" value={closeAt} onChange={(e) => setCloseAt(e.target.value)} className="px-2 py-1 ml-1 border rounded" />
+          <input
+            type="datetime-local"
+            value={closeAt}
+            onChange={(e) => setCloseAt(e.target.value)}
+            className="w-full px-2 py-1 mt-1 border rounded"
+          />
         </label>
-        <label className="flex items-center space-x-1">
+
+        <label className="flex items-center gap-1">
           <span>Accent</span>
-          <input type="color" value={accent} onChange={(e) => setAccent(e.target.value)} className="w-10 h-8 p-0 border rounded" />
+          <input
+            type="color"
+            value={accent}
+            onChange={(e) => setAccent(e.target.value)}
+            className="w-10 h-8 p-0 border rounded"
+          />
         </label>
       </div>
 
       <div>
         <label className="block mb-1">Form description</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe your form (optional)" className="w-full p-2 border rounded" />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Describe your form (optional)"
+          className="w-full p-2 border rounded"
+        />
       </div>
 
       <div>
         <label className="block mb-1">Thank-you message</label>
-        <input type="text" value={thankYouMessage} onChange={(e) => setThankYouMessage(e.target.value)} className="w-full p-2 border rounded" />
+        <input
+          type="text"
+          value={thankYouMessage}
+          onChange={(e) => setThankYouMessage(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
       </div>
 
-      {/* Section Buttons */}
-      <div className="flex space-x-2">
-        <button onClick={handleAddSection} className="px-4 py-2 border rounded hover:bg-gray-100">Add section</button>
+      {/* Buttons */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => alert("Basics clicked")}
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
+        >
+          Basics
+        </button>
+        <button
+          onClick={() => alert("Details clicked")}
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
+        >
+          Details
+        </button>
+        <button
+          onClick={handleAddSection}
+          className="flex-1 px-4 py-2 border rounded hover:bg-gray-100"
+        >
+          Add section
+        </button>
       </div>
 
       {/* Dynamic Sections */}
       <div className="mt-4 space-y-4">
-        {sections.map(section => (
+        {sections.map((section) => (
           <div key={section.id} className="relative p-4 border rounded bg-gray-50">
             <h3 className="font-semibold">{section.title}</h3>
             <textarea
               placeholder="Drag items here from the right to start building your form"
               value={section.content}
               onChange={(e) => {
-                const updatedSections = sections.map(s => s.id === section.id ? { ...s, content: e.target.value } : s);
+                const updatedSections = sections.map((s) =>
+                  s.id === section.id ? { ...s, content: e.target.value } : s
+                );
                 setSections(updatedSections);
               }}
               className="w-full p-2 mt-2 border rounded"
