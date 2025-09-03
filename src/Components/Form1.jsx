@@ -2,26 +2,41 @@ import React, { useState } from "react";
 
 export default function Form1() {
   const [quota, setQuota] = useState(0);
+  const [quiz, setQuiz] = useState(false);
   const [captcha, setCaptcha] = useState(false);
   const [shuffleQs, setShuffleQs] = useState(false);
   const [shuffleOptions, setShuffleOptions] = useState(false);
   const [openAt, setOpenAt] = useState("");
   const [closeAt, setCloseAt] = useState("");
-  const [accent, setAccent] = useState("#4f46e5"); 
+  const [accent, setAccent] = useState("#4f46e5");
   const [description, setDescription] = useState("");
   const [thankYouMessage, setThankYouMessage] = useState("Thanks for your response!");
 
+  // Dynamic sections
+  const [sections, setSections] = useState([]);
+
   const handleAddSection = () => {
-    alert("Add section clicked!");
+    const newSection = {
+      id: Date.now(), // unique id
+      title: `New Section`,
+      content: ""
+    };
+    setSections([...sections, newSection]);
   };
 
-  const handleRemoveSection = () => {
-    alert("Remove section clicked!");
+  const handleRemoveSection = (id) => {
+    setSections(sections.filter((section) => section.id !== id));
   };
 
   return (
-    <div className="max-w-xl p-6 mx-auto mt-10 space-y-4 bg-white rounded-lg shadow-md">
+    <div className="max-w-4xl p-6 mt-10 ml-20 mr-auto bg-white shadow-md space-y-4 rounded-3xl">
+      {/* Form Controls */}
       <div className="flex flex-wrap items-center gap-4">
+        <label className="flex items-center gap-1">
+          <input type="checkbox" checked={quiz} onChange={() => setQuiz(!quiz)} />
+          <span>Quiz</span>
+        </label>
+
         <label className="flex items-center gap-1">
           <input type="checkbox" checked={captcha} onChange={() => setCaptcha(!captcha)} />
           <span>Captcha</span>
@@ -47,7 +62,7 @@ export default function Form1() {
             type="number"
             value={quota}
             onChange={(e) => setQuota(e.target.value)}
-            className="w-16 px-2 border rounded"
+            className="w-20 px-2 border rounded"
           />
         </label>
       </div>
@@ -104,6 +119,7 @@ export default function Form1() {
         />
       </div>
 
+      {/* Buttons */}
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => alert("Basics clicked")}
@@ -123,12 +139,32 @@ export default function Form1() {
         >
           Add section
         </button>
-        <button
-          onClick={handleRemoveSection}
-          className="flex-1 px-4 py-2 text-red-500 border rounded hover:bg-red-50"
-        >
-          Remove section
-        </button>
+      </div>
+
+      {/* Dynamic Sections */}
+      <div className="mt-4 space-y-4">
+        {sections.map((section) => (
+          <div key={section.id} className="relative p-4 border rounded bg-gray-50">
+            <h3 className="font-semibold">{section.title}</h3>
+            <textarea
+              placeholder="Drag items here from the right to start building your form"
+              value={section.content}
+              onChange={(e) => {
+                const updatedSections = sections.map((s) =>
+                  s.id === section.id ? { ...s, content: e.target.value } : s
+                );
+                setSections(updatedSections);
+              }}
+              className="w-full p-2 mt-2 border rounded"
+            />
+            <button
+              onClick={() => handleRemoveSection(section.id)}
+              className="absolute text-red-500 top-2 right-2 hover:text-red-700"
+            >
+              Remove Section
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
