@@ -5,7 +5,11 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <Form1 />
+      <div className="justify-start ">
+        <Form1 />
+
+      </div>
+
     </div>
   )
 }
