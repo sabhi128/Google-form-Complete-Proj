@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Form1() {
+export default function Form1({ onAddSectionFromSidebar }) {
   const [quota, setQuota] = useState(0);
   const [quiz, setQuiz] = useState(false);
   const [captcha, setCaptcha] = useState(false);
@@ -27,8 +27,14 @@ export default function Form1() {
     setSections(sections.filter((section) => section.id !== id));
   };
 
+  // 🔹 Bind addSection to ref from App.jsx
+  useEffect(() => {
+    if (onAddSectionFromSidebar) {
+      onAddSectionFromSidebar.current = handleAddSection;
+    }
+  }, [onAddSectionFromSidebar, sections]);
+
   return (
-    <div className="max-w-4xl p-6 mt-10 ml-20 mr-auto bg-base-100 shadow-md space-y-4 rounded-3xl text-base-content border border-base-300">
       {/* Form Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-1">
