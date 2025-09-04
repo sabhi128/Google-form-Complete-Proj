@@ -8,7 +8,7 @@ export default function Forms({ selectedQuestion, forms, setForms }) {
         { id: Date.now(), type: selectedQuestion }
       ]);
     }
-  }, [selectedQuestion, setForms]); // ✅ dependency array sahi kiya
+  }, [selectedQuestion, setForms]); 
 
   const componentMap = {
     'Short answer': ShortAnswerComponent,
