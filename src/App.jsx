@@ -44,7 +44,7 @@ const App = () => {
   <>
     <Form1 onAddSectionFromSidebar={addSectionRef} />
 
-    {/* ✅ Forms.jsx show only if question selected */}
+    {/*  Forms.jsx show only if question selected */}
     {selectedQuestion && (
       <Forms
         selectedQuestion={selectedQuestion}
