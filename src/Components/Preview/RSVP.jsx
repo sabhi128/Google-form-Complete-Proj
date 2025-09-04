@@ -17,6 +17,7 @@ const RSVP = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 px-4 sm:px-6">
       <div className="bg-white w-full max-w-3xl mx-auto max-h-[90vh] rounded-xl shadow-lg relative flex flex-col">
+        
         {/* Header */}
         <div className="flex justify-between items-center px-4 sm:px-6 py-4 border-b">
           <h2 className="text-xl font-bold text-gray-800">Form Preview</h2>
