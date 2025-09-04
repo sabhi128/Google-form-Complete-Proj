@@ -16,10 +16,10 @@ const LeadCapture = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div className="bg-white w-[800px] max-h-[90vh] rounded-xl shadow-lg relative flex flex-col">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 px-4 sm:px-6">
+      <div className="bg-white w-full max-w-3xl mx-auto max-h-[90vh] rounded-xl shadow-lg relative flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b">
+        <div className="flex justify-between items-center px-4 sm:px-6 py-4 border-b">
           <h2 className="text-xl font-bold text-gray-800">Form Preview</h2>
           <button
             onClick={onClose}
@@ -30,7 +30,7 @@ const LeadCapture = ({ onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-4">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
             Lead Capture
           </h2>
@@ -74,7 +74,7 @@ const LeadCapture = ({ onClose }) => {
             {/* Company */}
             <div className="border rounded-lg p-4">
               <label className="block font-medium text-gray-700 mb-2">
-                Company 
+                Company
               </label>
               <input
                 type="text"
@@ -100,16 +100,15 @@ const LeadCapture = ({ onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t px-6 py-4 rounded-b-xl bg-gray-50">
+        <div className="flex items-center justify-between border-t px-4 sm:px-6 py-4 rounded-b-xl bg-gray-50">
           <span className="text-sm text-gray-500">Page 1 of 1</span>
           <button
             onClick={handleSubmit}
             disabled={!fullName || !email || !company}
-            className={`px-5 py-2 rounded-lg shadow ${
-              !fullName || !email || !company
+            className={`px-5 py-2 rounded-lg shadow ${!fullName || !email || !company
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-800 text-white hover:bg-blue-700"
-            }`}
+              }`}
           >
             Submit
           </button>
