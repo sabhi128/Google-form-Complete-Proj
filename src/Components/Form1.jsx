@@ -36,7 +36,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
   }, [onAddSectionFromSidebar, sections]);
 
   return (
-<div className="w-[93%] p-6 mt-6 mx-auto bg-white shadow-md space-y-4 rounded-2xl">
+    <div className="w-[93%] p-6 mt-6 mx-auto bg-white shadow-md space-y-4 rounded-2xl">
       {/* Form Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-1">
@@ -126,7 +126,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
         />
       </div>
 
-       {/* Buttons */}
+      {/* Buttons */}
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => alert("Basics clicked")}
