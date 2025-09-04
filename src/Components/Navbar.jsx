@@ -1,8 +1,8 @@
 import React from "react";
-import { FiDownload, FiShare2, FiEye, FiUpload } from "react-icons/fi";
+import { FiDownload, FiShare2, FiUpload } from "react-icons/fi";
 import { HiOutlineClock, HiOutlineRefresh } from "react-icons/hi";
 
-export default function Navbar({ currentView, setCurrentView }) {
+export default function Navbar({ currentView, setCurrentView, onPreviewClick, templateName }) {
   return (
     <div className="flex flex-wrap items-center justify-between p-4 bg-white shadow-md gap-4">
       {/* Logo + Title */}
@@ -10,7 +10,11 @@ export default function Navbar({ currentView, setCurrentView }) {
         <div className="flex items-center justify-center w-10 h-10 text-white bg-blue-800 rounded">
           U
         </div>
-        <h1 className="text-lg font-semibold">Ultra Survey</h1>
+        <h1 className="text-lg font-semibold truncate max-w-[260px] overflow-hidden whitespace-nowrap">
+          {templateName ? templateName : "Ultra Survey"}
+        </h1>
+
+
       </div>
 
       {/* Actions */}
@@ -24,6 +28,7 @@ export default function Navbar({ currentView, setCurrentView }) {
 
         {/* Theme toggle */}
         <label className="swap swap-rotate">
+          {/* hidden checkbox controls the state */}
           <input type="checkbox" className="theme-controller" value="sunset" />
 
           {/* sun icon */}
@@ -45,7 +50,7 @@ export default function Navbar({ currentView, setCurrentView }) {
           </svg>
         </label>
 
-        {/* Buttons */}
+        {/* File/Share buttons */}
         <button className="flex-1 w-full sm:w-auto flex items-center gap-1 px-3 py-1 border rounded hover:bg-gray-100">
           <FiDownload /> CSV
         </button>
@@ -65,23 +70,27 @@ export default function Navbar({ currentView, setCurrentView }) {
           Load link
         </button>
 
+        {/* View Switch */}
         <button
           onClick={() => setCurrentView("builder")}
-          className={`flex-1 w-full sm:w-auto px-3 py-1 border rounded hover:bg-gray-100 ${
-            currentView === "builder" ? "bg-blue-100 text-blue-800" : ""
-          }`}
+          className={`flex-1 w-full sm:w-auto px-3 py-1 border rounded hover:bg-gray-100 ${currentView === "builder" ? "bg-blue-100 text-blue-800" : ""
+            }`}
         >
           Builder
         </button>
         <button
           onClick={() => setCurrentView("responses")}
-          className={`flex-1 w-full sm:w-auto px-3 py-1 border rounded hover:bg-gray-100 ${
-            currentView === "responses" ? "bg-blue-100 text-blue-800" : ""
-          }`}
+          className={`flex-1 w-full sm:w-auto px-3 py-1 border rounded hover:bg-gray-100 ${currentView === "responses" ? "bg-blue-100 text-blue-800" : ""
+            }`}
         >
           Responses
         </button>
-        <button className="flex-1 w-full sm:w-auto px-3 py-1 text-white bg-blue-800 rounded hover:bg-blue-700">
+
+        {/* Preview Button */}
+        <button
+          onClick={onPreviewClick}
+          className="flex-1 w-full sm:w-auto px-3 py-1 text-white bg-blue-800 rounded hover:bg-blue-700"
+        >
           Preview
         </button>
       </div>
