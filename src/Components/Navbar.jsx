@@ -1,9 +1,8 @@
-
 import React, { useEffect, useRef } from "react";
 import { FiDownload, FiShare2, FiUpload } from "react-icons/fi";
 import { HiOutlineClock, HiOutlineRefresh } from "react-icons/hi";
 
-export default function Navbar({ currentView, setCurrentView, onPreviewClick, templateName }) {
+export default function Navbar({ currentView, setCurrentView }) {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -76,9 +75,7 @@ export default function Navbar({ currentView, setCurrentView, onPreviewClick, te
         <div className="flex items-center justify-center w-10 h-10 text-white bg-blue-800 rounded">
           U
         </div>
-        <h1 className="text-lg font-semibold truncate max-w-[260px] overflow-hidden whitespace-nowrap">          
-          {templateName ? templateName : "Ultra Survey"}
-</h1>
+        <h1 className="text-lg font-semibold">Ultra Survey</h1>
       </div>
 
       {/* Actions */}
@@ -163,9 +160,7 @@ export default function Navbar({ currentView, setCurrentView, onPreviewClick, te
           Responses
         </button>
 
-        <button onClick={onPreviewClick}
-          className="flex-1 w-full sm:w-auto px-3 py-1 text-white bg-blue-800 rounded hover:bg-blue-700"
-        >
+        <button className="flex-1 w-full sm:w-auto px-3 py-1 text-white bg-blue-800 rounded hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500">
           Preview
         </button>
       </div>
