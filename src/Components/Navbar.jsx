@@ -2,30 +2,48 @@ import React, { useEffect, useRef } from "react";
 import { FiDownload, FiShare2, FiUpload } from "react-icons/fi";
 import { HiOutlineClock, HiOutlineRefresh } from "react-icons/hi";
 
-export default function Navbar({ currentView, setCurrentView }) {
+export default function Navbar({ currentView, setCurrentView  ,onPreviewClick, templateName }) {
   const fileInputRef = useRef(null);
 
+  // useEffect(() => {
+  //   const checkbox = document.querySelector(".theme-controller");
+  //   if (checkbox) {
+  //     document.documentElement.setAttribute("data-theme", "light");
+
+  //     const apply = () => {
+  //       const newTheme = checkbox.checked ? "dark" : "light";
+  //       document.documentElement.setAttribute("data-theme", newTheme);
+  //       localStorage.setItem("theme", newTheme);
+  //     };
+
+  //     checkbox.addEventListener("change", apply);
+
+  //     const saved = localStorage.getItem("theme");
+  //     if (saved) {
+  //       document.documentElement.setAttribute("data-theme", saved);
+  //       checkbox.checked = saved === "dark";
+  //     }
+  //     return () => checkbox.removeEventListener("change", apply);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const checkbox = document.querySelector(".theme-controller");
-    if (checkbox) {
-      document.documentElement.setAttribute("data-theme", "light");
-
-      const apply = () => {
-        const newTheme = checkbox.checked ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-      };
-
-      checkbox.addEventListener("change", apply);
-
-      const saved = localStorage.getItem("theme");
-      if (saved) {
-        document.documentElement.setAttribute("data-theme", saved);
-        checkbox.checked = saved === "dark";
-      }
-      return () => checkbox.removeEventListener("change", apply);
-    }
-  }, []);
+  const checkbox = document.querySelector(".theme-controller");
+  if (checkbox) {
+    // check saved theme
+    const saved = localStorage.getItem("theme");
+    const initialTheme = saved ? saved : "light"; // default light
+    document.documentElement.setAttribute("data-theme", initialTheme);
+    checkbox.checked = initialTheme === "dark";
+    const apply = () => {
+      const newTheme = checkbox.checked ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    };
+    checkbox.addEventListener("change", apply);
+    return () => checkbox.removeEventListener("change", apply);
+  }
+}, []);
 
   // CSV download
   const handleDownloadCSV = () => {
@@ -69,7 +87,7 @@ export default function Navbar({ currentView, setCurrentView }) {
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between p-4 bg-base-100 text-base-content shadow-md gap-4 border-b border-base-300">
+    <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b shadow-md bg-base-100 text-base-content border-base-300">
       {/* Logo + Title */}
       <div className="flex items-center gap-2">
         <div className="flex items-center justify-center w-10 h-10 text-white bg-blue-800 rounded">
@@ -103,19 +121,19 @@ export default function Navbar({ currentView, setCurrentView }) {
         {/* Buttons */}
         <button
           onClick={handleDownloadCSV}
-          className="flex-1 w-full sm:w-auto flex items-center gap-1 px-3 py-1 border rounded border-base-300 hover:bg-base-200"
+          className="flex items-center flex-1 w-full gap-1 px-3 py-1 border rounded sm:w-auto border-base-300 hover:bg-base-200"
         >
           <FiDownload /> CSV
         </button>
         <button
           onClick={handleDownloadJSON}
-          className="flex-1 w-full sm:w-auto flex items-center gap-1 px-3 py-1 border rounded border-base-300 hover:bg-base-200"
+          className="flex items-center flex-1 w-full gap-1 px-3 py-1 border rounded sm:w-auto border-base-300 hover:bg-base-200"
         >
           <FiDownload /> JSON
         </button>
         <button
           onClick={handleImportClick}
-          className="flex-1 w-full sm:w-auto flex items-center gap-1 px-3 py-1 border rounded border-base-300 hover:bg-base-200"
+          className="flex items-center flex-1 w-full gap-1 px-3 py-1 border rounded sm:w-auto border-base-300 hover:bg-base-200"
         >
           <FiUpload /> Import
         </button>
@@ -128,7 +146,7 @@ export default function Navbar({ currentView, setCurrentView }) {
           className="hidden"
         />
 
-        <button className="flex-1 w-full sm:w-auto flex items-center gap-1 px-3 py-1 border rounded border-base-300 hover:bg-base-200">
+        <button className="flex items-center flex-1 w-full gap-1 px-3 py-1 border rounded sm:w-auto border-base-300 hover:bg-base-200">
           <FiShare2 /> Share link
         </button>
 
@@ -159,11 +177,18 @@ export default function Navbar({ currentView, setCurrentView }) {
         >
           Responses
         </button>
-
-        <button className="flex-1 w-full sm:w-auto px-3 py-1 text-white bg-blue-800 rounded hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500">
+<button onClick={onPreviewClick}
+          className="flex-1 w-full px-3 py-1 text-white bg-blue-800 rounded sm:w-auto hover:bg-blue-700"
+        >
           Preview
         </button>
       </div>
     </div>
   );
 }
+
+
+
+
+
+

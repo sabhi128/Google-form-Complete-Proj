@@ -28,7 +28,7 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen ">
       <Navbar
         onPreviewClick={() => setShowPreview(true)}
         currentView={currentView}
@@ -37,12 +37,13 @@ const App = () => {
       />
 
 
-      <div className="flex flex-col lg:flex-row flex-1 bg-gray-100">
+      <div className="flex flex-col flex-1 bg-gray-100 lg:flex-row">
         {/* main content */}
         <div className="flex-1 order-1 lg:order-none">
           {currentView === "builder" ? (
             <>
-              <Form1 onAddSectionFromSidebar={addSectionRef} />
+            <div className="mt-10 ml-10">              <Form1 onAddSectionFromSidebar={addSectionRef} />
+</div>
 
               {/*  Forms.jsx show only if question selected */}
               {selectedQuestion && (

@@ -49,8 +49,8 @@ export default function Forms({ selectedQuestion, forms, setForms }) {
     const componentNames = Object.keys(componentMap);
 
     return (
-        <div className="min-h-screen p-8 font-sans bg-gray-100">
-            <div className="p-6 mx-auto bg-white shadow-lg max-w-7xl rounded-xl">
+        <div className="min-h-screen  font-sans bg-gray-100 w-[100%] p-6">
+            <div className="max-w-4xl p-2 mx-auto ml-12 bg-white shadow-lg rounded-xl">
 
 
                 <div className="p-6 space-y-8 border border-gray-200 rounded-lg">
