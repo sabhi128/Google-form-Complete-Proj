@@ -37,7 +37,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
   }, [onAddSectionFromSidebar, sections]);
 
   return (
-    <div className="max-w-6xl p-6 mx-auto bg-white shadow-lg rounded-xl">
+    <div className="max-w-6xl p-6 mx-auto rounded-xl shadow-lg bg-base-100 text-base-content">
       {/* Form Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-1">
@@ -143,19 +143,19 @@ export default function Form1({ onAddSectionFromSidebar }) {
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={() => alert("Basics clicked")}
-          className="flex-1 px-4 py-2 border rounded hover:bg-base-200 border-base-300"
+          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
         >
           Basics
         </button>
         <button
           onClick={() => alert("Details clicked")}
-          className="flex-1 px-4 py-2 border rounded hover:bg-base-200 border-base-300"
+          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
         >
           Details
         </button>
         <button
           onClick={handleAddSection}
-          className="flex-1 px-4 py-2 border rounded hover:bg-base-200 border-base-300"
+          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
         >
           Add section
         </button>
@@ -192,8 +192,3 @@ export default function Form1({ onAddSectionFromSidebar }) {
     </div>
   );
 }
-
-
-
-
-

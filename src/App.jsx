@@ -6,7 +6,7 @@ import TemplateModal from './Components/Template';
 import Responses from './Components/Responses'
 import EmployeeFeedback from "./Components/Preview/EmpFDB";
 import JobApplication from './Components/Preview/JobApp';
-import EventFeedback from './Components/Preview/EventFDB';
+import EventFeedback from "./Components/Preview/EventFDB";
 import CourseEvaluation from './Components/Preview/CourseEVL';
 import CustomerSatisfaction from './Components/Preview/CustmrSatf';
 import Quiz from './Components/Preview/Quiz';
@@ -26,9 +26,9 @@ const App = () => {
   const [forms, setForms] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-
   return (
-    <div className="flex flex-col min-h-screen ">
+    // 🔹 Add theme-aware background + text
+    <div className="flex flex-col min-h-screen bg-base-100 text-base-content">
       <Navbar
         onPreviewClick={() => setShowPreview(true)}
         currentView={currentView}
@@ -36,14 +36,15 @@ const App = () => {
         templateName={selectedTemplate}
       />
 
-
-      <div className="flex flex-col flex-1 bg-gray-100 lg:flex-row">
+      {/* 🔹 Replace fixed bg-gray-100 with theme-aware */}
+      <div className="flex flex-col flex-1 lg:flex-row bg-base-100 text-base-content">
         {/* main content */}
         <div className="flex-1 order-1 lg:order-none">
           {currentView === "builder" ? (
             <>
-            <div className="mt-10 ml-10">              <Form1 onAddSectionFromSidebar={addSectionRef} />
-</div>
+              <div className="mt-10 ml-10">
+                <Form1 onAddSectionFromSidebar={addSectionRef} />
+              </div>
 
               {/*  Forms.jsx show only if question selected */}
               {selectedQuestion && (
@@ -57,7 +58,6 @@ const App = () => {
           ) : (
             <Responses />
           )}
-
         </div>
 
         {/* sidebar */}
@@ -68,10 +68,7 @@ const App = () => {
           }
           onSelectQuestion={(type) => setSelectedQuestion(type)}   // ✅ new prop
         />
-
       </div>
-
-
 
       {showPreview && (
         <>
@@ -122,7 +119,6 @@ const App = () => {
           }}
         />
       )}
-
     </div>
   );
 };
