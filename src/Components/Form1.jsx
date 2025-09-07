@@ -1,20 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import usePersistentState from "../hooks/usePersistentState";
 
 export default function Form1({ onAddSectionFromSidebar }) {
-  const [quota, setQuota] = useState(0);
-  const [quiz, setQuiz] = useState(false);
-  const [captcha, setCaptcha] = useState(false);
-  const [shuffleQs, setShuffleQs] = useState(false);
-  const [shuffleOptions, setShuffleOptions] = useState(false);
-  const [openAt, setOpenAt] = useState("");
-  const [closeAt, setCloseAt] = useState("");
-  const [accent, setAccent] = useState("#4f46e5");
-  const [description, setDescription] = useState("");
-  const [thankYouMessage, setThankYouMessage] = useState(
+  const [quota, setQuota] = usePersistentState("form1_quota", 0);
+  const [quiz, setQuiz] = usePersistentState("form1_quiz", false);
+  const [captcha, setCaptcha] = usePersistentState("form1_captcha", false);
+  const [shuffleQs, setShuffleQs] = usePersistentState("form1_shuffleQs", false);
+  const [shuffleOptions, setShuffleOptions] = usePersistentState("form1_shuffleOptions", false);
+  const [openAt, setOpenAt] = usePersistentState("form1_openAt", "");
+  const [closeAt, setCloseAt] = usePersistentState("form1_closeAt", "");
+  const [accent, setAccent] = usePersistentState("form1_accent", "#4f46e5");
+  const [description, setDescription] = usePersistentState("form1_description", "");
+  const [thankYouMessage, setThankYouMessage] = usePersistentState(
+    "form1_thankYouMessage",
     "Thanks for your response!"
   );
+  const [sections, setSections] = usePersistentState("form1_sections", []);
 
-  const [sections, setSections] = useState([]);
+  // Detect dark mode
+  const [darkMode, setDarkMode] = React.useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setDarkMode(savedTheme === "dark");
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setDarkMode(theme === "dark");
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleAddSection = () => {
     const newSection = {
@@ -29,7 +47,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
     setSections(sections.filter((section) => section.id !== id));
   };
 
-  // 🔹 Bind addSection to ref from App.jsx
+  // Bind addSection to ref from App.jsx
   useEffect(() => {
     if (onAddSectionFromSidebar) {
       onAddSectionFromSidebar.current = handleAddSection;
@@ -37,7 +55,11 @@ export default function Form1({ onAddSectionFromSidebar }) {
   }, [onAddSectionFromSidebar, sections]);
 
   return (
-    <div className="max-w-6xl p-6 mx-auto rounded-xl shadow-lg bg-base-100 text-base-content">
+<div className={`max-w-6xl p-6 mx-auto shadow-lg rounded-xl border
+  ${darkMode 
+     ? "bg-base-200 text-base-content border border-white/20" 
+     : "bg-white text-base-content border-gray-300"}`}>
+
       {/* Form Controls */}
       <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-1">
@@ -45,6 +67,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="checkbox"
             checked={quiz}
             onChange={() => setQuiz(!quiz)}
+            className={`${darkMode ? "bg-base-100 border-base-300" : "bg-white border-gray-300"}`}
           />
           <span>Quiz</span>
         </label>
@@ -54,6 +77,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="checkbox"
             checked={captcha}
             onChange={() => setCaptcha(!captcha)}
+            className={`${darkMode ? "bg-base-100 border-base-300" : "bg-white border-gray-300"}`}
           />
           <span>Captcha</span>
         </label>
@@ -63,6 +87,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="checkbox"
             checked={shuffleQs}
             onChange={() => setShuffleQs(!shuffleQs)}
+            className={`${darkMode ? "bg-base-100 border-base-300" : "bg-white border-gray-300"}`}
           />
           <span>Shuffle Qs</span>
         </label>
@@ -72,6 +97,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="checkbox"
             checked={shuffleOptions}
             onChange={() => setShuffleOptions(!shuffleOptions)}
+            className={`${darkMode ? "bg-base-100 border-base-300" : "bg-white border-gray-300"}`}
           />
           <span>Shuffle options</span>
         </label>
@@ -82,7 +108,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="number"
             value={quota}
             onChange={(e) => setQuota(e.target.value)}
-            className="w-20 px-2 border rounded bg-base-100 text-base-content border-base-300"
+            className={`w-20 px-2 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content" : "bg-white border-gray-300 text-base-content"}`}
           />
         </label>
       </div>
@@ -94,7 +120,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="datetime-local"
             value={openAt}
             onChange={(e) => setOpenAt(e.target.value)}
-            className="w-full px-2 py-1 mt-1 border rounded bg-base-100 text-base-content border-base-300"
+            className={`w-full px-2 py-1 mt-1 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content text-purple-600" : "bg-white border-gray-300 text-base-content"}`}
           />
         </label>
 
@@ -104,7 +130,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="datetime-local"
             value={closeAt}
             onChange={(e) => setCloseAt(e.target.value)}
-            className="w-full px-2 py-1 mt-1 border rounded bg-base-100 text-base-content border-base-300"
+            className={`w-full px-2 py-1 mt-1 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content text-purple-600" : "bg-white border-gray-300 text-base-content"}`}
           />
         </label>
 
@@ -114,7 +140,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
             type="color"
             value={accent}
             onChange={(e) => setAccent(e.target.value)}
-            className="w-10 h-8 p-0 border rounded border-base-300"
+            className={`w-10 h-8 p-0 border rounded ${darkMode ? "border-base-300" : "border-gray-300"}`}
           />
         </label>
       </div>
@@ -125,7 +151,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe your form (optional)"
-          className="w-full p-2 border rounded bg-base-100 text-base-content border-base-300"
+          className={`w-full p-2 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content" : "bg-white border-gray-300 text-base-content"}`}
         />
       </div>
 
@@ -135,7 +161,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
           type="text"
           value={thankYouMessage}
           onChange={(e) => setThankYouMessage(e.target.value)}
-          className="w-full p-2 border rounded bg-base-100 text-base-content border-base-300"
+          className={`w-full p-2 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content" : "bg-white border-gray-300 text-base-content"}`}
         />
       </div>
 
@@ -143,19 +169,19 @@ export default function Form1({ onAddSectionFromSidebar }) {
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={() => alert("Basics clicked")}
-          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
+          className={`flex-1 px-4 py-2 border rounded hover:bg-base-200 ${darkMode ? "border-base-300" : "border-gray-300"}`}
         >
           Basics
         </button>
         <button
           onClick={() => alert("Details clicked")}
-          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
+          className={`flex-1 px-4 py-2 border rounded hover:bg-base-200 ${darkMode ? "border-base-300" : "border-gray-300"}`}
         >
           Details
         </button>
         <button
           onClick={handleAddSection}
-          className="flex-1 px-4 py-2 border rounded border-base-300 hover:bg-base-200"
+          className={`flex-1 px-4 py-2 border rounded hover:bg-base-200 ${darkMode ? "border-base-300" : "border-gray-300"}`}
         >
           Add section
         </button>
@@ -166,7 +192,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
         {sections.map((section) => (
           <div
             key={section.id}
-            className="relative p-4 border rounded bg-base-200 border-base-300"
+            className={`relative p-4 border rounded ${darkMode ? "bg-base-100 border-base-300" : "bg-gray-50 border-gray-300"}`}
           >
             <h3 className="font-semibold">{section.title}</h3>
             <textarea
@@ -178,7 +204,7 @@ export default function Form1({ onAddSectionFromSidebar }) {
                 );
                 setSections(updatedSections);
               }}
-              className="w-full p-2 mt-2 border rounded bg-base-100 text-base-content border-base-300"
+              className={`w-full p-2 mt-2 border rounded ${darkMode ? "bg-base-100 border-base-300 text-base-content" : "bg-white border-gray-300 text-base-content"}`}
             />
             <button
               onClick={() => handleRemoveSection(section.id)}

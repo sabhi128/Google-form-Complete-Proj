@@ -16,15 +16,40 @@ import RSVP from './Components/Preview/RSVP';
 import BugReport from './Components/Preview/BugReport';
 import Forms from './Components/Forms';
 
+
+// {/* ======================================================== Updated this part ======================================================== */}
+import { templateMap } from "./Components/FormsTemplates";
+import usePersistentState from "./hooks/usePersistentState";
+
 const App = () => {
-  // Dono states rakhi hain
-  const [showPreview, setShowPreview] = useState(false);
-  const [showTemplates, setShowTemplates] = useState(false);
-  const [currentView, setCurrentView] = useState('builder'); // 'builder' or 'responses'
-  const addSectionRef = useRef(null);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [forms, setForms] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+const [showPreview, setShowPreview] = usePersistentState("showPreview", false);
+const [showTemplates, setShowTemplates] = usePersistentState("showTemplates", false);
+const [currentView, setCurrentView] = usePersistentState("currentView", "builder");
+const [selectedTemplate, setSelectedTemplate] = usePersistentState("selectedTemplate", null);
+const [forms, setForms] = usePersistentState("forms", []);
+const [selectedQuestion, setSelectedQuestion] = usePersistentState("selectedQuestion", null);
+const addSectionRef = useRef(null);
+
+
+  const handleAiSuggest = () => {
+    const aiQuestions = [
+      "How satisfied are you overall?",
+      "What did you like the most?",
+      "What can we improve?",
+      "How likely are you to recommend us?",
+      "Any additional comments?"
+    ];
+
+    const newForms = aiQuestions.map((q) => ({
+      id: Date.now() + Math.random(),
+      type: "Ai Suggest",
+      placeholder: q,
+    }));
+
+    setForms((prev) => [...prev, ...newForms]);
+  };
+
+  // {/* ======================================================== Till this ======================================================== */}
 
   return (
     // 🔹 Add theme-aware background + text
@@ -33,42 +58,39 @@ const App = () => {
         onPreviewClick={() => setShowPreview(true)}
         currentView={currentView}
         setCurrentView={setCurrentView}
-        templateName={selectedTemplate}
+  // {/* ======================================================== Updated line 62 ======================================================== */}
+        selectedTemplate={selectedTemplate}
       />
 
-      {/* 🔹 Replace fixed bg-gray-100 with theme-aware */}
-      <div className="flex flex-col flex-1 lg:flex-row bg-base-100 text-base-content">
-        {/* main content */}
-        <div className="flex-1 order-1 lg:order-none">
-          {currentView === "builder" ? (
-            <>
-              <div className="mt-10 ml-10">
-                <Form1 onAddSectionFromSidebar={addSectionRef} />
-              </div>
-
-              {/*  Forms.jsx show only if question selected */}
-              {selectedQuestion && (
-                <Forms
-                  selectedQuestion={selectedQuestion}
-                  forms={forms}
-                  setForms={setForms}
-                />
-              )}
-            </>
-          ) : (
-            <Responses />
-          )}
+               {/* ======================================================== Updated this part ======================================================== */}
+      <div className="flex flex-col lg:flex-row bg-base-100 text-base-content min-h-screen transition-colors duration-300">
+  {/* Main content */}
+  <div className="flex-1 order-1 lg:order-none overflow-y-auto max-h-screen scrollbar-none px-4 sm:px-6 lg:px-10 py-6">
+    {currentView === "builder" ? (
+      <>
+        {/* Centered and responsive wrapper */}
+        <div className="max-w-4xl mx-auto w-full">
+          <Form1 onAddSectionFromSidebar={addSectionRef} />
+          <Forms forms={forms} setForms={setForms} />
         </div>
+      </>
+    ) : (
+      <Responses />
+    )}
+  </div>
 
-        {/* sidebar */}
-        <Sidebar
-          onBrowseTemplatesClick={() => setShowTemplates(true)}
-          onAddSection={() =>
-            addSectionRef.current && addSectionRef.current()
-          }
-          onSelectQuestion={(type) => setSelectedQuestion(type)}   // ✅ new prop
-        />
-      </div>
+  {/* Sidebar */}
+  <Sidebar
+    onBrowseTemplatesClick={() => setShowTemplates(true)}
+    onAddSection={() => addSectionRef.current && addSectionRef.current()}
+    onSelectQuestion={(label) => {
+      setForms((prev) => [...prev, { type: label, id: Date.now() }]);
+    }}
+    onAiSuggestClick={handleAiSuggest}
+  />
+</div>
+
+      {/* ======================================================== Till this ======================================================== */}
 
       {showPreview && (
         <>
@@ -109,16 +131,29 @@ const App = () => {
           )}
         </>
       )}
+
+      {/* ======================================================== Updated this part ======================================================== */}
+
+
       {showTemplates && (
         <TemplateModal
           isOpen={showTemplates}
           onClose={() => setShowTemplates(false)}
           onSelectTemplate={(templateName) => {
             setSelectedTemplate(templateName);
+
+            if (templateMap[templateName]) {
+              const template = templateMap[templateName];
+              setSelectedTemplate(template.name);
+              setForms(template.forms);
+            }
+
             setShowTemplates(false);
           }}
         />
       )}
+
+      {/* ======================================================== Till this ======================================================== */}
     </div>
   );
 };

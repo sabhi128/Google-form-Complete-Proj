@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { FiDownload, FiShare2, FiUpload } from "react-icons/fi";
 import { HiOutlineClock, HiOutlineRefresh } from "react-icons/hi";
 
-export default function Navbar({ currentView, setCurrentView, onPreviewClick }) {
-  const fileInputRef = useRef(null);
+// export default function Navbar({ currentView, setCurrentView, onPreviewClick }) {
+{/* ============================ CHANGED THE ABOVE(Passed props) ============================ */ }
+export default function Navbar({ currentView, setCurrentView, onPreviewClick, selectedTemplate }) {
+    const fileInputRef = useRef(null);
 
   // Theme toggle
   useEffect(() => {
@@ -73,7 +75,10 @@ export default function Navbar({ currentView, setCurrentView, onPreviewClick }) 
         <div className="flex items-center justify-center w-10 h-10 text-white bg-blue-800 rounded">
           U
         </div>
-        <h1 className="text-lg font-semibold">Ultra Survey</h1>
+        {/* ============================ CHANGED THIS line 79 to 80 ============================ */}
+        {/* <h1 className="text-lg font-semibold">Ultra Survey</h1> */}
+        <h1 className="text-lg font-semibold">{selectedTemplate || "Ultra Survey"}</h1>
+        {/* ====================================================================== */}
       </div>
 
       {/* Actions */}
