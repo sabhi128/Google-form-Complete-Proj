@@ -22,7 +22,7 @@ import { cleanupLocalStorage } from "./utils/localStorageCleanup";
 
 // Login & Signup Pages
 import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
+import SignUp from "./Pages/SignUp";
 
 const App = () => {
   const navigate = useNavigate();
@@ -252,7 +252,7 @@ const App = () => {
         path="/signup"
         element={
           <AuthRedirect>
-            <Signup />
+            <SignUp />
           </AuthRedirect>
         }
       />
