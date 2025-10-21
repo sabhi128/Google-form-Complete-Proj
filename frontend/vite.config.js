@@ -1,18 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/', // ensure correct paths on Vercel
+  build: {
+    outDir: 'dist', // default, but let’s be explicit
+  },
   server: {
     port: 4000,
     proxy: {
       '/api': {
         target: 'http://localhost:5001',
         changeOrigin: true,
-        secure: false
-      }
+        secure: false,
+      },
     },
-    historyApiFallback: true // <-- This enables React Router paths like /login or /signup
-  }
+  },
 })
