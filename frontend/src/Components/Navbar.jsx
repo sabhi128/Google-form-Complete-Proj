@@ -1,9 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FiDownload, FiShare2, FiUpload } from "react-icons/fi";
-import { HiOutlineClock, HiOutlineRefresh } from "react-icons/hi";
+import React, { useEffect, useRef, useState, memo } from "react";
+import { FiDownload, FiShare2, FiUpload, FiSave } from "react-icons/fi";
+import { HiOutlineRefresh } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar({ currentView, setCurrentView, onPreviewClick, selectedTemplate }) {
+const Navbar = memo(function Navbar({
+  currentView, setCurrentView, onPreviewClick, selectedTemplate,
+  // New props
+  forms,
+  onSave,
+  isSaving,
+  saveError,
+}) {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -36,29 +43,41 @@ export default function Navbar({ currentView, setCurrentView, onPreviewClick, se
     }
   }, []);
 
-  // CSV download
+  // Convert form data to CSV
+  const convertToCSV = (data) => {
+    if (!data || data.length === 0) return "";
+    const headers = "id,type,placeholder,label";
+    const rows = data.map(
+      (form) => `${form.id},${form.type},"${form.placeholder || ""}","${form.label || ""}"`
+    );
+    return [headers, ...rows].join("\n");
+  };
+
+  // Download form data as CSV
   const handleDownloadCSV = () => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      ["Name,Email,Score", "John Doe,john@example.com,95"].join("\n");
+    if (!forms || forms.length === 0) {
+      alert("No form data to download.");
+      return;
+    }
+    const csvContent = "data:text/csv;charset=utf-8," + convertToCSV(forms);
     const link = document.createElement("a");
     link.href = encodeURI(csvContent);
-    link.download = "Ultra-Survey.csv";
+    link.download = `${selectedTemplate || "form"}.csv`;
     link.click();
   };
 
-  // JSON download
+  // Download form data as JSON
   const handleDownloadJSON = () => {
-    const data = [
-      { name: "John Doe", email: "john@example.com", score: 95 },
-      { name: "Jane Smith", email: "jane@example.com", score: 88 },
-    ];
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
+    if (!forms || forms.length === 0) {
+      alert("No form data to download.");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(forms, null, 2)], {
       type: "application/json",
     });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "Ultra-Survey.json";
+    link.download = `${selectedTemplate || "form"}.json`;
     link.click();
   };
 
@@ -106,10 +125,18 @@ const handleLogout = () => {
       <div className="flex items-center gap-2">
         <div className="items-center hidden gap-2 sm:flex">
           <button className="p-2 rounded hover:bg-base-200">
-            <HiOutlineClock size={20} />
-          </button>
-          <button className="p-2 rounded hover:bg-base-200">
             <HiOutlineRefresh size={20} />
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className={`flex items-center gap-1 px-3 py-1 border rounded border-base-300 hover:bg-base-200 ${
+              isSaving ? "cursor-not-allowed opacity-50" : ""
+            } ${saveError ? "border-red-500 text-red-500" : ""}`}
+            title={saveError || (isSaving ? "Saving..." : "Save to cloud")}
+          >
+            <FiSave className={isSaving ? "animate-spin" : ""} />
+            {isSaving ? "Saving..." : "Save"}
           </button>
 
           {/* Theme toggle */}
@@ -193,4 +220,6 @@ const handleLogout = () => {
       </div>
     </div>
   );
-}
+});
+
+export default Navbar;

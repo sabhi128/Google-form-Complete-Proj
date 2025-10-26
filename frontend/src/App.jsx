@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Form1 from "./Components/Form1";
@@ -36,10 +36,14 @@ const App = () => {
   const [showTemplates, setShowTemplates] = usePersistentState("showTemplates", false);
   const [currentView, setCurrentView] = usePersistentState("currentView", "builder");
   const [selectedTemplate, setSelectedTemplate] = usePersistentState("selectedTemplate", null);
-  const [forms, setForms] = usePersistentState("forms", []);
+  const [forms, setForms] = usePersistentState("forms-draft", []);
   const [selectedQuestion, setSelectedQuestion] = usePersistentState("selectedQuestion", null);
   const [backendError, setBackendError] = useState(null);
   const addSectionRef = useRef(null);
+  // Saving state
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // 🔐 Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
@@ -61,11 +65,11 @@ const App = () => {
   }, []);
 
   // 🚪 Logout handler
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/login", { replace: true }); // 🔥 Redirect instantly
-  };
+  }, [navigate]);
 
   // Protected Route
   const ProtectedRoute = ({ children }) => {
@@ -79,33 +83,55 @@ const App = () => {
 
   // Fetch forms from backend
   useEffect(() => {
+    // Only fetch if we haven't loaded from localStorage
+    if (isLoaded) return;
+
     const fetchForms = async () => {
       try {
         const res = await fetch("/api/forms");
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        if (Array.isArray(data)) setForms(data);
-        else setForms([]);
+        // Only set forms if localStorage is empty
+        const localData = localStorage.getItem("forms-draft");
+        if (!localData || localData === "[]") {
+          if (Array.isArray(data)) setForms(data);
+          else setForms([]);
+        }
       } catch (error) {
         console.error("Failed to fetch forms:", error);
         setBackendError("Unable to connect to backend server. Working in offline mode.");
+      } finally {
+        setIsLoaded(true);
       }
     };
     fetchForms();
-  }, []);
+  }, [isLoaded, setForms]);
 
   // Save form to backend
-  const saveFormsToBackend = async (formData) => {
+  const saveFormsToBackend = async () => {
+    if (!forms || forms.length === 0) {
+      alert("Nothing to save.");
+      return;
+    }
+    setIsSaving(true);
+    setSaveError(null);
     try {
+      // This assumes you want to save the entire `forms` array.
+      // You might want to save a single form object instead.
       const res = await fetch("/api/forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(forms), // Or a specific form object
       });
-      if (!res.ok) throw new Error(`Failed to save form: ${res.status}`);
-      console.log("Form saved successfully");
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Failed to save form: ${res.status} - ${errorData}`);
+      }
+      setTimeout(() => setIsSaving(false), 1000); // Give user feedback
     } catch (err) {
       console.error("Error saving form:", err);
+      setSaveError(err.message);
+      setIsSaving(false);
     }
   };
 
@@ -141,7 +167,11 @@ const App = () => {
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 selectedTemplate={selectedTemplate}
-                onLogout={handleLogout} // ✅ Added
+                onLogout={handleLogout}
+                forms={forms}
+                onSave={saveFormsToBackend}
+                isSaving={isSaving}
+                saveError={saveError}
               />
 
               <div className="flex flex-col lg:flex-row bg-base-100 text-base-content min-h-screen transition-colors duration-300">
