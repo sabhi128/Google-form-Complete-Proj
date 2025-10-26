@@ -88,7 +88,8 @@ const App = () => {
 
     const fetchForms = async () => {
       try {
-        const res = await fetch("/api/forms");
+        // Use relative path for API calls
+        const res = await fetch("/api/forms"); 
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         // Only set forms if localStorage is empty
@@ -118,7 +119,8 @@ const App = () => {
     try {
       // This assumes you want to save the entire `forms` array.
       // You might want to save a single form object instead.
-      const res = await fetch("/api/forms", {
+      // Use relative path for API calls
+      const res = await fetch("/api/forms", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(forms), // Or a specific form object
