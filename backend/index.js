@@ -13,7 +13,6 @@ const bcrypt = require('bcryptjs');
 
 
 const app = express();
-app.use(express.json());
 app.use(cors({
   origin: [
     'http://localhost:4000', 
@@ -23,6 +22,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(morgan('dev'));
+app.use(express.json());
 app.use(helmet());
 
 const authRoutes = require("./routes/auth");
